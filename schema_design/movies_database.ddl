@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS content.genre (
 CREATE TABLE IF NOT EXISTS content.genre_film_work (
     id uuid PRIMARY KEY,
     created timestamp with time zone,
-    genre_id INT,
-    film_work_id INT,
+    genre_id uuid,
+    film_work_id uuid,
     CONSTRAINT genre_id
       FOREIGN KEY(id)
 	  REFERENCES genre(id),
@@ -47,8 +47,8 @@ CREATE TABLE IF NOT EXISTS content.person_film_work (
     id uuid PRIMARY KEY,
     created timestamp with time zone,
     role TEXT,
-    person_id INT,
-    film_work_id INT,
+    person_id uuid,
+    film_work_id uuid,
     CONSTRAINT person_id
       FOREIGN KEY(id)
 	  REFERENCES person(id),
