@@ -5,6 +5,11 @@ from django.utils.translation import gettext_lazy as _
 from .mixins import UUIDMixin, TimeStampedMixin
 
 
+class Gender(models.TextChoices):
+    MALE = 'male', _('male')
+    FEMALE = 'female', _('female')
+
+
 class FilmTypes(models.TextChoices):
     movie = 'movie', _('movie')
     tv_show = 'tv_show', _('tv_show')
@@ -54,6 +59,7 @@ class GenreFilmWork(UUIDMixin):
 
 class Person(UUIDMixin, TimeStampedMixin):
     full_name = models.CharField(_('full_name'), max_length=255)
+    gender = models.TextField(_('gender'), choices=Gender.choices, null=True)
 
     class Meta:
         db_table = "content\".\"person"
