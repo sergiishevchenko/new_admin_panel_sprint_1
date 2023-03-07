@@ -5,11 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from .mixins import UUIDMixin, TimeStampedMixin
 
 
-class Gender(models.TextChoices):
-    MALE = 'male', _('male')
-    FEMALE = 'female', _('female')
-
-
 class FilmTypes(models.TextChoices):
     movie = 'movie', _('movie')
     tv_show = 'tv_show', _('tv_show')
@@ -34,8 +29,6 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
     creation_date = models.DateField(_('creation_date'))
     rating = models.FloatField(_('rating'), blank=True, validators=[MinValueValidator(0), MaxValueValidator(100)])
     type = models.TextField(_('type'), choices=FilmTypes.choices)
-    certificate = models.CharField(_('certificate'), max_length=512, blank=True)
-    file_path = models.FileField(_('file'), blank=True, null=True, upload_to='movies/')
 
     genres = models.ManyToManyField(Genre, through='GenreFilmWork')
 
@@ -59,7 +52,6 @@ class GenreFilmWork(UUIDMixin):
 
 class Person(UUIDMixin, TimeStampedMixin):
     full_name = models.CharField(_('full_name'), max_length=255)
-    gender = models.TextField(_('gender'), choices=Gender.choices, null=True)
 
     class Meta:
         db_table = "content\".\"person"
