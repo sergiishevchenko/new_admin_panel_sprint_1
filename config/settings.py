@@ -22,6 +22,12 @@ DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
+if DEBUG:
+    import socket
+    INTERNAL_IPS = ['127.0.0.1',]
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+
 ROOT_URLCONF = 'config.urls'
 
 WSGI_APPLICATION = 'config.wsgi.application'
