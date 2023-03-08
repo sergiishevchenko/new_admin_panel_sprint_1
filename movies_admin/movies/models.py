@@ -29,6 +29,7 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
     creation_date = models.DateField(_('creation_date'))
     rating = models.FloatField(_('rating'), blank=True, validators=[MinValueValidator(0), MaxValueValidator(100)])
     type = models.TextField(_('type'), choices=FilmTypes.choices)
+    file_path = models.FileField(_('file'), blank=True, null=True, upload_to='movies/')
 
     genres = models.ManyToManyField(Genre, through='GenreFilmWork')
 
