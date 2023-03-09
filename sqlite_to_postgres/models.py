@@ -14,7 +14,7 @@ Data = Dict[str, Iterator[T]]
 
 @dataclass
 class Model:
-    '''Model dataclass'''
+    '''Model dataclass.'''
     @property
     def values(self) -> Tuple[Any, ...]:
         return astuple(self)
@@ -22,14 +22,14 @@ class Model:
 
 @dataclass
 class FilmType(str, Enum):
-    '''FilmType dataclass'''
+    '''FilmType dataclass.'''
     movie = 'movie'
     tv_show = 'tv_show'
 
 
 @dataclass
 class RoleType(str, Enum):
-    '''RoleType dataclass'''
+    '''RoleType dataclass.'''
     actor = 'actor'
     writer = 'writer'
     director = 'director'
@@ -37,7 +37,7 @@ class RoleType(str, Enum):
 
 @dataclass
 class FilmWork(Model):
-    '''FilmWork dataclass'''
+    '''FilmWork dataclass.'''
     id: UUID
     title: str
     description: Optional[str]
@@ -51,7 +51,7 @@ class FilmWork(Model):
 
 @dataclass
 class Person(Model):
-    '''Person dataclass'''
+    '''Person dataclass.'''
     id: UUID
     full_name: str
     created_at: datetime = field(default_factory=datetime.utcnow)
@@ -60,7 +60,7 @@ class Person(Model):
 
 @dataclass
 class PersonFilmWork(Model):
-    '''PersonFilmWork dataclass'''
+    '''PersonFilmWork dataclass.'''
     id: UUID
     person_id: UUID
     film_work_id: UUID
@@ -70,7 +70,7 @@ class PersonFilmWork(Model):
 
 @dataclass
 class Genre(Model):
-    '''Genre dataclass'''
+    '''Genre dataclass.'''
     id: UUID
     name: str
     description: Optional[str]
@@ -80,7 +80,7 @@ class Genre(Model):
 
 @dataclass
 class GenreFilmWork(Model):
-    '''GenreFilmWork dataclass'''
+    '''GenreFilmWork dataclass.'''
     id: UUID
     genre_id: UUID
     film_work_id: UUID
