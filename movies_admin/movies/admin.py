@@ -4,7 +4,7 @@ from .models import Genre, FilmWork, GenreFilmWork, PersonFilmWork, Person
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created', 'modified')
+    list_display = ('name', 'created_at', 'updated_at')
     search_fields = ('name', 'description', 'id')
 
 
