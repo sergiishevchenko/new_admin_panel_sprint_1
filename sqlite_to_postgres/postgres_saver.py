@@ -30,7 +30,7 @@ class PostgresSaver:
         # set current time to start var
         start = datetime.datetime.now()
 
-        # insert data to PostgreSQL DB table
+        # Execute a statement using :sql:`VALUES` with a sequence of parameters.
         execute_values(self.cursor, f"""INSERT INTO {table_name} VALUES %s ON CONFLICT (id) DO NOTHING;""", (
             row.values for row in data), page_size=self.page_size,)
 
