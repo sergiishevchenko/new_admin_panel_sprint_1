@@ -34,31 +34,19 @@ CREATE TABLE IF NOT EXISTS content.genre (
 
 CREATE TABLE IF NOT EXISTS content.genre_film_work (
     id uuid PRIMARY KEY,
-    created_at timestamp with time zone,
-    genre_id uuid,
-    film_work_id uuid,
-    CONSTRAINT genre_id
-      FOREIGN KEY(id)
-	  REFERENCES genre(id),
-    CONSTRAINT film_work_id
-      FOREIGN KEY(id)
-	  REFERENCES film_work(id)
+    film_work_id uuid NOT NULL REFERENCES film_work(id) ON DELETE CASCADE,
+    genre_id uuid NOT NULL REFERENCES genre(id) ON DELETE CASCADE,
+    created_at timestamp with time zone
 );
 
 CREATE TYPE role_type AS ENUM ('actor', 'writer', 'director');
 
 CREATE TABLE IF NOT EXISTS content.person_film_work (
     id uuid PRIMARY KEY,
-    created_at timestamp with time zone,
+    film_work_id uuid NOT NULL REFERENCES film_work(id) ON DELETE CASCADE,
+    person_id uuid NOT NULL REFERENCES person(id) ON DELETE CASCADE,
     role role_type,
-    person_id uuid,
-    film_work_id uuid,
-    CONSTRAINT person_id
-      FOREIGN KEY(id)
-	  REFERENCES person(id),
-    CONSTRAINT film_work_id
-      FOREIGN KEY(id)
-	  REFERENCES film_work(id)
+    created_at timestamp with time zone
 );
 
 CREATE UNIQUE INDEX film_work_person_role ON content.person_film_work (film_work_id, person_id, role);
