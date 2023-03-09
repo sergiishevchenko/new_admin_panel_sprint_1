@@ -40,7 +40,7 @@ def get_sqlite_data():
 
 
 def get_postgres_data():
-    test_postgres_data = {'created_at': 'TO_CHAR(created,\'YYYY-MM-DD HH24:MI:SS\')',
-                          'updated_at': 'TO_CHAR(modified,\'YYYY-MM-DD HH24:MI:SS\')',
+    test_postgres_data = {'created_at': 'TO_CHAR(created_at,\'YYYY-MM-DD HH24:MI:SS\')',
+                          'updated_at': 'TO_CHAR(updated_at,\'YYYY-MM-DD HH24:MI:SS\')',
                           }
     return test_postgres_data
