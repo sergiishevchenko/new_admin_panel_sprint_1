@@ -15,12 +15,12 @@ from utils import get_db_creds
 
 
 def load_from_sqlite(logger: Logger, connection: sqlite3.Connection, pg_conn: _connection):
-    """Основной метод загрузки данных из SQLite в Postgres
+    """Upload data method from SQLite to Postgres
     Args:
-        logger: логгер
-        connection: подключение к SQLite
-        pg_conn: подключение к PostgreSQL
-        page_size: пачка данных
+        logger: logger
+        connection: connection to SQLite
+        pg_conn: connection to PostgreSQL
+        page_size: page size (record quantity)
     """
     postgres_saver = PostgresSaver(pg_conn, PAGE_SIZE)
     sqlite_extractor = SQLiteExtractor(connection)
@@ -38,7 +38,6 @@ if __name__ == '__main__':
     # convert type of PAGE_SIZE from str to int
     PAGE_SIZE = int(os.environ.get('PAGE_SIZE'))
 
-    # define logger
     logger = get_logger(__name__)
 
     # databases creds
