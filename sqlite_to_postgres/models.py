@@ -13,6 +13,19 @@ Data = Dict[str, Iterator[T]]
 
 
 @dataclass
+class UUIDMixin:
+    '''UUIDMixin dataclass.'''
+    id: UUID
+    created_at: datetime = field(default_factory=datetime.utcnow)
+
+
+@dataclass
+class TimeStampedMixin:
+    '''TimeStampedMixin dataclass.'''
+    updated_at: datetime = field(default_factory=datetime.utcnow)
+
+
+@dataclass
 class Model:
     '''Model dataclass.'''
     @property
@@ -36,52 +49,39 @@ class RoleType(str, Enum):
 
 
 @dataclass
-class FilmWork(Model):
+class FilmWork(Model, UUIDMixin, TimeStampedMixin):
     '''FilmWork dataclass.'''
-    id: UUID
     title: str
     description: Optional[str]
     creation_date: Optional[date]
     file_path: Optional[str]
     rating: Optional[float]
     type: Optional[FilmType]
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
 
 
 @dataclass
-class Person(Model):
+class Person(Model, UUIDMixin, TimeStampedMixin):
     '''Person dataclass.'''
-    id: UUID
     full_name: str
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
 
 
 @dataclass
-class PersonFilmWork(Model):
+class PersonFilmWork(Model, UUIDMixin):
     '''PersonFilmWork dataclass.'''
-    id: UUID
     person_id: UUID
     film_work_id: UUID
     role: Optional[RoleType]
-    created_at: datetime = field(default_factory=datetime.utcnow)
 
 
 @dataclass
-class Genre(Model):
+class Genre(Model, UUIDMixin, TimeStampedMixin):
     '''Genre dataclass.'''
-    id: UUID
     name: str
     description: Optional[str]
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
 
 
 @dataclass
-class GenreFilmWork(Model):
+class GenreFilmWork(Model, UUIDMixin):
     '''GenreFilmWork dataclass.'''
-    id: UUID
     genre_id: UUID
     film_work_id: UUID
-    created_at: datetime = field(default_factory=datetime.utcnow)
