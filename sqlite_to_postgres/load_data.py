@@ -1,16 +1,15 @@
+from logging import Logger
 import os
-import psycopg2
 import sqlite3
 
 from dotenv import load_dotenv
-from logger import get_logger
-from logging import Logger
-
-from postgres_saver import PostgresSaver
-from sqlite_extractor import SQLiteExtractor
-
+import psycopg2
 from psycopg2.extensions import connection as _connection
 from psycopg2.extras import DictCursor
+
+from logger import get_logger
+from postgres_saver import PostgresSaver
+from sqlite_extractor import SQLiteExtractor
 from utils import get_db_creds
 
 
