@@ -43,5 +43,9 @@ if __name__ == '__main__':
     db_creds = get_db_creds()
 
     # connection to DBs
-    with sqlite3.connect('db.sqlite') as sqlite_conn, psycopg2.connect(**db_creds['psql'], cursor_factory=DictCursor) as pg_conn:
+    with sqlite3.connect(**db_creds['sqlite_DB_NAME']) as sqlite_conn, psycopg2.connect(**db_creds['psql'], cursor_factory=DictCursor) as pg_conn:
         load_from_sqlite(logger, sqlite_conn, pg_conn)
+
+    # close connections
+    sqlite_conn.close()
+    pg_conn.close()
