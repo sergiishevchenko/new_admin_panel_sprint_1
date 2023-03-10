@@ -30,3 +30,18 @@ class PersonFilmWorkInline(admin.TabularInline):
 class PersonAdmin(admin.ModelAdmin):
     inlines = (PersonFilmWorkInline,)
     search_fields = ('full_name', 'id')
+    list_display = ('full_name', 'created_at', 'get_genres',)
+    list_prefetch_related = (..., 'genres')
+
+    def get_queryset(self, request):
+        queryset = (
+            super()
+            .get_queryset(request)
+            .prefetch_related(*self.list_prefetch_related)
+        )
+        return queryset
+
+    def get_genres(self, obj):
+        return ','.join([genre.name for genre in obj.genres.all()])
+
+    get_genres.short_description = 'Жанры фильма'
