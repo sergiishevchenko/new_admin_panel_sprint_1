@@ -1,4 +1,3 @@
-from logging import Logger
 import os
 import sqlite3
 
@@ -9,23 +8,23 @@ from psycopg2.extras import DictCursor
 
 from logger import get_logger
 from postgres_saver import PostgresSaver
-from sqlite_extractor import SQLiteExtractor
-from utils import get_db_creds
+from sqlite_extractor import SQLiteLoader
+from utils import get_models, get_db_creds
 
 
-def load_from_sqlite(logger: Logger, connection: sqlite3.Connection, pg_conn: _connection):
+def load_from_sqlite(connection: sqlite3.Connection, pg_conn: _connection):
     """Upload data method from SQLite to Postgres
     Args:
-        logger: logger
         connection: connection to SQLite
         pg_conn: connection to PostgreSQL
-        page_size: page size (record quantity)
     """
-    postgres_saver = PostgresSaver(pg_conn, PAGE_SIZE)
-    sqlite_extractor = SQLiteExtractor(connection)
 
-    data = sqlite_extractor.extract_movies()
-    postgres_saver.save_all_data(data)
+    for table_name, table_model in models.items():
+        sqlite_loader = SQLiteLoader(connection, table_name, table_model, PAGE_SIZE)
+        data_from_sql = sqlite_loader.extract_movies()
+
+        postgres_saver = PostgresSaver(pg_conn, table_name, table_model, PAGE_SIZE)
+        postgres_saver.save_all_data(data_from_sql)
 
     logger.info('Loading data from SQLite DB to PostgreSQL DB completed successfully!')
 
@@ -42,9 +41,12 @@ if __name__ == '__main__':
     # databases creds
     db_creds = get_db_creds()
 
+    # get all models
+    models = get_models()
+
     # connection to DBs
-    with sqlite3.connect(**db_creds['sqlite_DB_NAME']) as sqlite_conn, psycopg2.connect(**db_creds['psql'], cursor_factory=DictCursor) as pg_conn:
-        load_from_sqlite(logger, sqlite_conn, pg_conn)
+    with sqlite3.connect('db.sqlite') as sqlite_conn, psycopg2.connect(**db_creds['psql'], cursor_factory=DictCursor) as pg_conn:
+        load_from_sqlite(sqlite_conn, pg_conn)
 
     # close connections
     sqlite_conn.close()

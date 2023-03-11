@@ -1,41 +1,46 @@
-from dataclasses import dataclass, field, astuple
 from datetime import date, datetime
 from enum import Enum
-from typing import Any, Dict, Iterator, Optional, Tuple, TypeVar
+from typing import Optional
+import uuid
 from uuid import UUID
 
-
-# T - Declare Type variable.
-# Usage: T = TypeVar('T')  # Can be anything. Must be str or bytes. Bound to required class (Model)
-T = TypeVar('T', bound='Model')
-# Iterator - typing._GenericAlias. A generic version of collections.abc.Iterator.
-Data = Dict[str, Iterator[T]]
+from dataclasses import dataclass, field, asdict
 
 
 @dataclass
 class UUIDMixin:
     '''UUIDMixin dataclass.'''
-    id: UUID
+
+    id: UUID = field(default_factory=uuid.uuid4)
+
+
+@dataclass
+class CreateTimeMixin:
+    '''TimeStampedMixin dataclass.'''
+
     created_at: datetime = field(default_factory=datetime.utcnow)
 
 
 @dataclass
-class TimeStampedMixin:
+class UpdateTimeMixin:
     '''TimeStampedMixin dataclass.'''
+
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
 
 @dataclass
 class Model:
     '''Model dataclass.'''
+
     @property
-    def values(self) -> Tuple[Any, ...]:
-        return astuple(self)
+    def values(self):
+        return '\t'.join([str(x) for x in asdict(self).values()])
 
 
 @dataclass
 class FilmType(str, Enum):
     '''FilmType dataclass.'''
+
     movie = 'movie'
     tv_show = 'tv_show'
 
@@ -43,45 +48,51 @@ class FilmType(str, Enum):
 @dataclass
 class RoleType(str, Enum):
     '''RoleType dataclass.'''
+
     actor = 'actor'
     writer = 'writer'
     director = 'director'
 
 
-@dataclass
-class FilmWork(Model, UUIDMixin, TimeStampedMixin):
+@dataclass(order=True)
+class FilmWork(Model, UUIDMixin, CreateTimeMixin, UpdateTimeMixin):
     '''FilmWork dataclass.'''
-    title: str
-    description: Optional[str]
-    creation_date: Optional[date]
-    file_path: Optional[str]
-    rating: Optional[float]
-    type: Optional[FilmType]
+
+    title: str = None
+    description: Optional[str] = None
+    creation_date: Optional[date] = None
+    file_path: Optional[str] = None
+    rating: Optional[float] = None
+    type: Optional[FilmType] = None
 
 
-@dataclass
-class Person(Model, UUIDMixin, TimeStampedMixin):
+@dataclass(order=True)
+class Person(Model, UUIDMixin, CreateTimeMixin, UpdateTimeMixin):
     '''Person dataclass.'''
-    full_name: str
+
+    full_name: str = None
 
 
-@dataclass
-class PersonFilmWork(Model, UUIDMixin):
+@dataclass(order=True)
+class PersonFilmWork(Model, UUIDMixin, CreateTimeMixin):
     '''PersonFilmWork dataclass.'''
-    person_id: UUID
-    film_work_id: UUID
-    role: Optional[RoleType]
+
+    person_id: UUID = field(default_factory=uuid.uuid4)
+    film_work_id: UUID = field(default_factory=uuid.uuid4)
+    role: Optional[RoleType] = None
 
 
-@dataclass
-class Genre(Model, UUIDMixin, TimeStampedMixin):
+@dataclass(order=True)
+class Genre(Model, UUIDMixin, CreateTimeMixin, UpdateTimeMixin):
     '''Genre dataclass.'''
-    name: str
-    description: Optional[str]
+
+    name: str = None
+    description: Optional[str] = None
 
 
-@dataclass
-class GenreFilmWork(Model, UUIDMixin):
+@dataclass(order=True)
+class GenreFilmWork(Model, UUIDMixin, CreateTimeMixin):
     '''GenreFilmWork dataclass.'''
-    genre_id: UUID
-    film_work_id: UUID
+
+    genre_id: UUID = field(default_factory=uuid.uuid4)
+    film_work_id: UUID = field(default_factory=uuid.uuid4)
